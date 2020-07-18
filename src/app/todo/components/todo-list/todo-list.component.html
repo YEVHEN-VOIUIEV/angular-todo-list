@@ -1,0 +1,57 @@
+<input
+  type="text"
+  class="todo-input"
+  placeholder="What needs to be done"
+  [(ngModel)]="todoTitle"
+  (keyup.enter)="addTodo()"
+/>
+
+<app-todo-item
+  *ngFor="let todo of todoListFiltered()"
+  [todo]="todo"
+  (checkedItem)="doneEdit($event)"
+  (doubleClickedItem)="editTodo($event)"
+  (blurredItem)="doneEdit($event)"
+  (enteredItem)="doneEdit($event)"
+  (cancelledItem)="cancelEdit($event)"
+  (deletedItem)="deleteTodo($event)"
+>
+</app-todo-item>
+
+<div class="extra-container">
+  <div>
+    <label
+      ><input
+        type="checkbox"
+        (change)="checkAllTodo()"
+        [(ngModel)]="!anyRemainingModel"
+      />
+      Check All</label
+    >
+  </div>
+  <div>{{ remaining() }} items left</div>
+</div>
+
+<div class="extra-container">
+  <div>
+    <button [ngClass]="{ active: filter === 'all' }" (click)="filter = 'all'">
+      All
+    </button>
+    <button
+      [ngClass]="{ active: filter === 'active' }"
+      (click)="filter = 'active'"
+    >
+      Active
+    </button>
+    <button
+      [ngClass]="{ active: filter === 'completed' }"
+      (click)="filter = 'completed'"
+    >
+      Completed
+    </button>
+  </div>
+
+  <div *ngIf="atLeastOneCompleted()">
+    <button (click)="clearCompleted()">Clear Completed</button>
+  </div>
+</div>
